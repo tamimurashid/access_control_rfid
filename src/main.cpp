@@ -4,8 +4,11 @@
 // Define pins for RFID
 #define RST_PIN D1  // Reset pin
 #define SS_PIN D2   // Slave select (SDA) pin
-#define Green_led D0
-#define Red_led D3
+#define Green_led D4
+#define Red_led 3
+
+int a = 0;
+int b = 3;
 
 // Create an instance of the MFRC522 class
 MFRC522 rfid(SS_PIN, RST_PIN);
@@ -17,7 +20,16 @@ class Alert{
    digitalWrite(Green_led, LOW);
    delay(Delay2);
   }
+
+  void red_led(int Delay1, int Delay2){
+   digitalWrite(Red_led, HIGH);
+   delay(Delay1);
+   digitalWrite(Red_led, LOW);
+   delay(Delay2);
+
+  }
 };
+
 
 void rfid_reader(){
     // Check for new RFID card
@@ -48,7 +60,8 @@ void setup() {
   rfid.PCD_Init();
   Serial.println("RFID Reader initialized.");
 }
-
+Alert alert;
 void loop() {
+  
 
 }
