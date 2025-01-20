@@ -4,10 +4,15 @@
 // Define pins for RFID
 #define RST_PIN D1  // Reset pin
 #define SS_PIN D2   // Slave select (SDA) pin
+#define Green_led D0
+#define Red_led D3
 
 // Create an instance of the MFRC522 class
 MFRC522 rfid(SS_PIN, RST_PIN);
 
+void led_notification(){
+  
+}
 void rfid_reader(){
     // Check for new RFID card
   if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) {
