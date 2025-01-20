@@ -9,10 +9,16 @@
 
 // Create an instance of the MFRC522 class
 MFRC522 rfid(SS_PIN, RST_PIN);
+class Alert{
+  public: 
+  void green_led(int Delay1, int Delay2){
+   digitalWrite(Green_led, HIGH);
+   delay(Delay1);
+   digitalWrite(Green_led, LOW);
+   delay(Delay2);
+  }
+};
 
-void led_notification(){
-  
-}
 void rfid_reader(){
     // Check for new RFID card
   if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) {
