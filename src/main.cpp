@@ -5,10 +5,9 @@
 #define RST_PIN D1  // Reset pin
 #define SS_PIN D2   // Slave select (SDA) pin
 #define Green_led D4
-#define Red_led 3
+#define Red_led D8
 
-int a = 0;
-int b = 3;
+
 
 // Create an instance of the MFRC522 class
 MFRC522 rfid(SS_PIN, RST_PIN);
@@ -62,6 +61,11 @@ void setup() {
 }
 Alert alert;
 void loop() {
+
+  digitalWrite(Green_led, HIGH);
+  delay(1000);
+  ditgitalWrite(Green_led, LOW);
+  delay(1000);
   
 
 }
