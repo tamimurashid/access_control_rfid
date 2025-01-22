@@ -4,7 +4,7 @@
 // Define pins for RFID
 #define RST_PIN D1  // Reset pin
 #define SS_PIN D2   // Slave select (SDA) pin
-#define Green_led D4 // gpio  s3
+#define Green_led D0 // gpio  s3
 #define Red_led D3
 
 
@@ -66,6 +66,11 @@ void loop() {
   digitalWrite(Green_led, HIGH);
   delay(1000);
   digitalWrite(Green_led, LOW);
+  delay(1000);
+
+  digitalWrite(Red_led, HIGH);
+  delay(1000);
+  digitalWrite(Red_led, LOW);
   delay(1000);
   
 
