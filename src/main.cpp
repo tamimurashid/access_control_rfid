@@ -4,8 +4,8 @@
 // Define pins for RFID
 #define RST_PIN D1  // Reset pin
 #define SS_PIN D2   // Slave select (SDA) pin
-#define Green_led D4
-#define Red_led D8
+#define Green_led D4 // gpio  s3
+#define Red_led D3
 
 
 
@@ -51,6 +51,8 @@ void rfid_reader(){
 
 void setup() {
   // Initialize serial communication
+  pinMode(Green_led, OUTPUT);
+  pinMode(Red_led, OUTPUT);
   Serial.begin(9600);
   while (!Serial);
 
@@ -61,10 +63,9 @@ void setup() {
 }
 Alert alert;
 void loop() {
-
   digitalWrite(Green_led, HIGH);
   delay(1000);
-  ditgitalWrite(Green_led, LOW);
+  digitalWrite(Green_led, LOW);
   delay(1000);
   
 
