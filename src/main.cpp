@@ -1,53 +1,89 @@
 #include <SPI.h>
 #include <MFRC522.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
 
 // Define pins for RFID
 #define RST_PIN D1  // Reset pin
 #define SS_PIN D2   // Slave select (SDA) pin
-#define Green_led D0 // gpio  s3
+#define Green_led D0 // GPIO  s3
 #define Red_led D3
 #define Card_led 10
 #define Wait_led 9
 #define alarm D4
 
+// WiFi credentials
+const char* ssid = "your-SSID";        // Replace with your WiFi SSID
+const char* password = "your-PASSWORD"; // Replace with your WiFi password
+const char* serverUrl = "http://your-server-url.com/api"; // Replace with your server URL
 
 
 // Create an instance of the MFRC522 class
 MFRC522 rfid(SS_PIN, RST_PIN);
-
-  void green_led(int Delay1, int Delay2){
-   digitalWrite(Green_led, HIGH);
-   delay(Delay1);
-   digitalWrite(Green_led, LOW);
-   delay(Delay2);
+class Alert{
+  public:
+    void green_led(int Delay1, int Delay2) {
+    digitalWrite(Green_led, HIGH);
+    delay(Delay1);
+    digitalWrite(Green_led, LOW);
+    delay(Delay2);
   }
 
-  void red_led(int Delay1, int Delay2){
-   digitalWrite(Red_led, HIGH);
-   delay(Delay1);
-   digitalWrite(Red_led, LOW);
-   delay(Delay2);
+  void red_led(int Delay1, int Delay2) {
+    digitalWrite(Red_led, HIGH);
+    delay(Delay1);
+    digitalWrite(Red_led, LOW);
+    delay(Delay2);
   }
+};
 
+void data_handler(String cardID) {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
 
+    // Prepare the JSON payload
+    String payload = "{\"cardID\": \"" + cardID + "\"}";
 
-void rfid_reader(){
-    // Check for new RFID card
+    // Begin the HTTP POST request
+    http.begin(serverUrl);
+    http.addHeader("Content-Type", "application/json");
+
+    // Send the POST request and capture the response
+    int httpResponseCode = http.POST(payload);
+
+    if (httpResponseCode > 0) {
+      String response = http.getString();
+      Serial.println("Server Response: " + response);
+    } else {
+      Serial.println("Error in HTTP request: " + String(httpResponseCode));
+    }
+
+    // End the HTTP request
+    http.end();
+  } else {
+    Serial.println("WiFi not connected.");
+  }
+}
+
+String rfid_reader() {
+  // Check for new RFID card
   if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) {
-    return;
+    return ""; // Return an empty string if no card is detected
   }
 
-  // Print the UID of the RFID card
-  Serial.print("Card UID: ");
+  // Construct the UID as a string
+  String cardUID = "";
   for (byte i = 0; i < rfid.uid.size; i++) {
-    Serial.print(rfid.uid.uidByte[i] < 0x10 ? "0" : "");
-    Serial.print(rfid.uid.uidByte[i], HEX);
-    Serial.print("");
+    if (rfid.uid.uidByte[i] < 0x10) {
+      cardUID += "0"; // Add leading zero if necessary
+    }
+    cardUID += String(rfid.uid.uidByte[i], HEX);
   }
-  Serial.println();
 
   // Halt the RFID card to stop further communication
   rfid.PICC_HaltA();
+
+  return cardUID;
 }
 
 void setup() {
@@ -65,5 +101,9 @@ void setup() {
 }
 
 void loop() {
-
+  String cardID = rfid_reader();
+  if (cardID != "") {
+    Serial.print("Card UID: ");
+    Serial.println(cardID);
+  }
 }
