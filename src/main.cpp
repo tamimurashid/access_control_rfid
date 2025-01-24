@@ -6,13 +6,15 @@
 #define SS_PIN D2   // Slave select (SDA) pin
 #define Green_led D0 // gpio  s3
 #define Red_led D3
+#define Card_led 10
+#define Wait_led 9
+#define alarm D4
 
 
 
 // Create an instance of the MFRC522 class
 MFRC522 rfid(SS_PIN, RST_PIN);
-class Alert{
-  public: 
+
   void green_led(int Delay1, int Delay2){
    digitalWrite(Green_led, HIGH);
    delay(Delay1);
@@ -25,9 +27,8 @@ class Alert{
    delay(Delay1);
    digitalWrite(Red_led, LOW);
    delay(Delay2);
-
   }
-};
+
 
 
 void rfid_reader(){
@@ -50,28 +51,19 @@ void rfid_reader(){
 }
 
 void setup() {
-  // Initialize serial communication
   pinMode(Green_led, OUTPUT);
   pinMode(Red_led, OUTPUT);
+  pinMode(Card_led, OUTPUT);
+  pinMode(Wait_led, OUTPUT);
+  pinMode(alarm, OUTPUT);
+
   Serial.begin(9600);
   while (!Serial);
-
-  // Initialize SPI bus and RFID reader
   SPI.begin();  // SCK, MISO, MOSI, and SS (SDA) pins
   rfid.PCD_Init();
   Serial.println("RFID Reader initialized.");
 }
-Alert alert;
-void loop() {
-  digitalWrite(Green_led, HIGH);
-  delay(1000);
-  digitalWrite(Green_led, LOW);
-  delay(1000);
 
-  digitalWrite(Red_led, HIGH);
-  delay(1000);
-  digitalWrite(Red_led, LOW);
-  delay(1000);
-  
+void loop() {
 
 }
