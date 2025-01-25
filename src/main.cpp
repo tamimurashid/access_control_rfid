@@ -15,7 +15,8 @@
 // WiFi credentials
 const char* ssid = "Reindeer";        // Replace with your WiFi SSID
 const char* password = "200120022003"; // Replace with your WiFi password
-const char* serverUrl = "http://localhost:8888/Iot_web_project/Access_control/main.php"; // Replace with your server URL
+const char* serverUrl = "http://192.168.10.103:8888/Iot_web_project/Access_control/Api/";
+ // Replace with your server URL
 
 // Create an instance of the MFRC522 class
 MFRC522 rfid(SS_PIN, RST_PIN);
