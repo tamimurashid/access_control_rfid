@@ -6,35 +6,36 @@
 // Define pins for RFID
 #define RST_PIN D1  // Reset pin
 #define SS_PIN D2   // Slave select (SDA) pin
-#define Green_led D0 // GPIO  s3
+#define Green_led D0 // GPIO s3
 #define Red_led D3
 #define Card_led 10
 #define Wait_led 9
 #define alarm D4
 
 // WiFi credentials
-const char* ssid = "your-SSID";        // Replace with your WiFi SSID
-const char* password = "your-PASSWORD"; // Replace with your WiFi password
+const char* ssid = "Reindeer";        // Replace with your WiFi SSID
+const char* password = "200120022003"; // Replace with your WiFi password
 const char* serverUrl = "http://your-server-url.com/api"; // Replace with your server URL
-
 
 // Create an instance of the MFRC522 class
 MFRC522 rfid(SS_PIN, RST_PIN);
-class Alert{
+WiFiClient wifiClient;  // Create a WiFiClient instance
+
+class Alert {
   public:
     void green_led(int Delay1, int Delay2) {
-    digitalWrite(Green_led, HIGH);
-    delay(Delay1);
-    digitalWrite(Green_led, LOW);
-    delay(Delay2);
-  }
+      digitalWrite(Green_led, HIGH);
+      delay(Delay1);
+      digitalWrite(Green_led, LOW);
+      delay(Delay2);
+    }
 
-  void red_led(int Delay1, int Delay2) {
-    digitalWrite(Red_led, HIGH);
-    delay(Delay1);
-    digitalWrite(Red_led, LOW);
-    delay(Delay2);
-  }
+    void red_led(int Delay1, int Delay2) {
+      digitalWrite(Red_led, HIGH);
+      delay(Delay1);
+      digitalWrite(Red_led, LOW);
+      delay(Delay2);
+    }
 };
 
 void data_handler(String cardID) {
@@ -45,7 +46,7 @@ void data_handler(String cardID) {
     String payload = "{\"cardID\": \"" + cardID + "\"}";
 
     // Begin the HTTP POST request
-    http.begin(serverUrl);
+    http.begin(wifiClient, serverUrl);  // Use the updated API
     http.addHeader("Content-Type", "application/json");
 
     // Send the POST request and capture the response
@@ -98,6 +99,14 @@ void setup() {
   SPI.begin();  // SCK, MISO, MOSI, and SS (SDA) pins
   rfid.PCD_Init();
   Serial.println("RFID Reader initialized.");
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nWiFi connected.");
 }
 
 void loop() {
@@ -105,5 +114,8 @@ void loop() {
   if (cardID != "") {
     Serial.print("Card UID: ");
     Serial.println(cardID);
+
+    // Handle the card data
+    data_handler(cardID);
   }
 }
