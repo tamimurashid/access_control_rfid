@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include <MFRC522.h>
 #include <ESP8266WiFi.h>
+#include <ArduinoJson.h>
 #include <ESP8266HTTPClient.h>
 
 // Define pins for RFID
@@ -38,7 +39,7 @@ class Alert {
       delay(Delay2);
     }
 };
-
+Alert alert;
 void data_handler(String cardID) {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
@@ -56,6 +57,22 @@ void data_handler(String cardID) {
     if (httpResponseCode > 0) {
       String response = http.getString();
       Serial.println("Server Response: " + response);
+      
+      //parse the json 
+      StaticJsonDocument<200> doc;
+
+      DeserializationError error = deserializeJson(doc, response);
+
+      if(!error){
+        String code = doc["code"].as<String>();
+        if(code == "001"){
+          alert.green_led(1000, 1000);
+        }
+      }
+
+
+
+
     } else {
       Serial.println("Error in HTTP request: " + String(httpResponseCode));
     }
@@ -118,6 +135,6 @@ void loop() {
 
     // Handle the card data
     data_handler(cardID);
-    
+
   }
 }
