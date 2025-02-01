@@ -36,10 +36,12 @@ public:
          alarms(alarm, Delay1, Delay2, times);
     }
 
-    void warningSound() {
-    tone(alarm, 500, 500); // Play a 500Hz tone for 500ms
-    delay(500);
-    noTone(alarm);
+    void warningSound(int times) {
+        for(int i = 0; i < times; i++){
+            tone(alarm, 500, 500); // Play a 500Hz tone for 500ms
+            delay(1000);
+            noTone(alarm);
+        }
     }
 
     // Function to play a success sound
@@ -47,7 +49,7 @@ public:
     tone(alarm, 1000, 300); // Play a 1.5kHz tone for 300ms
     delay(300);
     noTone(alarm);
-    tone(alarm, 1500, 300); // Play a 2kHz tone for 300ms
+    tone(alarm, 2000, 300); // Play a 2kHz tone for 300ms
     delay(300);
     noTone(alarm);
     }
@@ -158,7 +160,7 @@ public:
                 } else if (code == "000") {
                     alert.red_led(100, 100, 3);
                     //alert.alarm_alert(100, 100, 5);
-                    alert.warningSound();
+                    alert.warningSound(3);
                 }
             } else {
                 Serial.println("JSON Parsing Error: " + String(error.f_str()));
