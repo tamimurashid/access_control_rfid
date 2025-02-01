@@ -32,7 +32,25 @@ public:
         blink_led(Red_led, Delay1, Delay2, times);
     }
 
+
+    void warningSound() {
+    tone(alarm, 500, 500); // Play a 500Hz tone for 500ms
+    delay(500);
+    noTone(alarm);
+    }
+
+    // Function to play a success sound
+    void successSound() {
+    tone(alarm, 1000, 300); // Play a 1.5kHz tone for 300ms
+    delay(300);
+    noTone(alarm);
+    tone(alarm, 1500, 300); // Play a 2kHz tone for 300ms
+    delay(300);
+    noTone(alarm);
+    }
+
 private:
+    
     void blink_led(int pin, int Delay1, int Delay2, int times) {
         for (int i = 0; i < times; i++) {
             digitalWrite(pin, HIGH);
@@ -124,8 +142,10 @@ public:
                 String code = doc["code"].as<String>();
                 if (code == "001") {
                     alert.green_led(100, 100, 2);
+                    alert.successSound();
                 } else if (code == "000") {
                     alert.red_led(100, 100, 3);
+                    alert.warningSound();
                 }
             } else {
                 Serial.println("JSON Parsing Error: " + String(error.f_str()));
