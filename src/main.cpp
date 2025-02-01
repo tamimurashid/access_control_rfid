@@ -59,7 +59,7 @@ void data_handler(String cardID) {
       Serial.println("Server Response: " + response);
       
       //parse the json 
-      StaticJsonDocument<200> doc;
+      JsonDocument doc;
 
       DeserializationError error = deserializeJson(doc, response);
 
@@ -67,6 +67,7 @@ void data_handler(String cardID) {
         String code = doc["code"].as<String>();
         if(code == "001"){
           alert.green_led(1000, 1000);
+          
         }
       }
 
