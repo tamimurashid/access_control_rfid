@@ -37,9 +37,9 @@ class Alert {
 
     void red_led(int Delay1, int Delay2, int times) {
        for(int i = 0; i < times; i++){
-        digitalWrite(Green_led, HIGH);
+        digitalWrite(Red_led, HIGH);
         delay(Delay1);
-        digitalWrite(Green_led, LOW);
+        digitalWrite(Red_led, LOW);
         delay(Delay2);
       }
     }
