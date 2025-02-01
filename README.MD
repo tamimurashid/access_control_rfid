@@ -34,7 +34,7 @@ This project is an **Access Control System** built using an **ESP8266 microcontr
 ## Circuit Diagram
 Below is the circuit diagram for the access control system:
 
-![Circuit Diagram](Raya_project_bb.png)
+![Circuit Diagram](Hardware_files/fritzing_files/Raya_project_bb2.png)
 
 ## How It Works
 1. **Card Scanning**: The user presents an RFID card to the MFRC522 reader.
