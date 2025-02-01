@@ -1,4 +1,5 @@
 #include <SPI.h>
+#include <Servo.h>
 #include <MFRC522.h>
 #include <ESP8266WiFi.h>
 #include <ArduinoJson.h>
@@ -12,6 +13,7 @@
 #define Card_led 10
 #define Wait_led 9
 #define alarm D4
+#define servo_motor D8
 
 // WiFi credentials
 const char* ssid = "Reindeer";        
@@ -20,6 +22,8 @@ const char* serverUrl = "http://192.168.10.103:8888/Iot_web_project/Access_contr
 
 // Create an instance of the WiFiClient
 WiFiClient wifiClient;
+
+Servo myServo;
 
 // Alert Class: Handles LED blinking
 class Alert {
@@ -130,6 +134,12 @@ private:
 public:
     AccessControl(WiFiClient& client, Alert& alertObj) : client(client), alert(alertObj) {}
 
+    void rotateServo() {
+    myServo.write(45);  // Move to 45 degrees clockwise
+    delay(5000);        // Hold position for 5 seconds
+    myServo.write(0);   // Return to the initial position (0 degrees)
+    } 
+
     void processCard(String cardID) {
         if (WiFi.status() != WL_CONNECTED) {
             Serial.println("WiFi not connected.");
@@ -156,11 +166,12 @@ public:
                 if (code == "001") {
                     alert.green_led(100, 100, 2);
                     alert.successSound(); 
+                    rotateServo();
                     // alert.alarm_alert(100, 100, 3);
                 } else if (code == "000") {
                     alert.red_led(100, 100, 3);
                     //alert.alarm_alert(100, 100, 5);
-                    alert.warningSound(3);
+                    alert.warningSound(2);
                 }
             } else {
                 Serial.println("JSON Parsing Error: " + String(error.f_str()));
@@ -179,10 +190,15 @@ RFIDReader rfidReader(SS_PIN, RST_PIN);
 WiFiManager wifiManager;
 AccessControl accessControl(wifiClient, alert);
 
+
 void setup() {
     // Initialize Serial Monitor
     Serial.begin(9600);
     while (!Serial);
+
+    myServo.attach(servo_motor); // Attach servo to the defined pin
+    myServo.write(0);  // Set the initial position to 0 degrees
+    delay(1000);
 
     // Set pin modes
     pinMode(Green_led, OUTPUT);
@@ -190,6 +206,7 @@ void setup() {
     pinMode(Card_led, OUTPUT);
     pinMode(Wait_led, OUTPUT);
     pinMode(alarm, OUTPUT);
+    pinMode(servo_motor, OUTPUT);
 
     // Initialize Components
     rfidReader.init();
