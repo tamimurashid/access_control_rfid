@@ -118,5 +118,6 @@ void loop() {
 
     // Handle the card data
     data_handler(cardID);
+    
   }
 }
