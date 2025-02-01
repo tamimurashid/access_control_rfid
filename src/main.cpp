@@ -26,8 +26,7 @@ WiFiClient wifiClient;  // Create a WiFiClient instance
 class Alert {
   public:
     void green_led(int Delay1, int Delay2, int times) {
-      int i;
-      for(i = 0; i < times; i++){
+      for(int i = 0; i < times; i++){
         digitalWrite(Green_led, HIGH);
         delay(Delay1);
         digitalWrite(Green_led, LOW);
@@ -36,11 +35,13 @@ class Alert {
       
     }
 
-    void red_led(int Delay1, int Delay2) {
-      digitalWrite(Red_led, HIGH);
-      delay(Delay1);
-      digitalWrite(Red_led, LOW);
-      delay(Delay2);
+    void red_led(int Delay1, int Delay2, int times) {
+       for(int i = 0; i < times; i++){
+        digitalWrite(Green_led, HIGH);
+        delay(Delay1);
+        digitalWrite(Green_led, LOW);
+        delay(Delay2);
+      }
     }
 };
 Alert alert;
@@ -74,7 +75,7 @@ void data_handler(String cardID) {
 
         }
         else if(code == "000"){
-          alert.red_led(5000, 1000);
+          alert.red_led(100, 100, 3);
         }
       }
 
