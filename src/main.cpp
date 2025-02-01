@@ -32,6 +32,9 @@ public:
         blink_led(Red_led, Delay1, Delay2, times);
     }
 
+    void alarm_alert(int Delay1, int Delay2, int times){
+         alarms(alarm, Delay1, Delay2, times);
+    }
 
     void warningSound() {
     tone(alarm, 500, 500); // Play a 500Hz tone for 500ms
@@ -50,7 +53,15 @@ public:
     }
 
 private:
-    
+    void alarms(int pin, int Delay1, int Delay2, int times){
+      for(int i = 0; i < times; i++){
+        digitalWrite(pin, HIGH);
+        delay(Delay1);
+        digitalWrite(pin, LOW);
+        delay(Delay2);
+      }
+
+    }
     void blink_led(int pin, int Delay1, int Delay2, int times) {
         for (int i = 0; i < times; i++) {
             digitalWrite(pin, HIGH);
@@ -142,9 +153,11 @@ public:
                 String code = doc["code"].as<String>();
                 if (code == "001") {
                     alert.green_led(100, 100, 2);
-                    alert.successSound();
+                    alert.successSound(); 
+                    // alert.alarm_alert(100, 100, 3);
                 } else if (code == "000") {
                     alert.red_led(100, 100, 3);
+                    //alert.alarm_alert(100, 100, 5);
                     alert.warningSound();
                 }
             } else {
