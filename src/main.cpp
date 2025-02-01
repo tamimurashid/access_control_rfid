@@ -25,11 +25,15 @@ WiFiClient wifiClient;  // Create a WiFiClient instance
 
 class Alert {
   public:
-    void green_led(int Delay1, int Delay2) {
-      digitalWrite(Green_led, HIGH);
-      delay(Delay1);
-      digitalWrite(Green_led, LOW);
-      delay(Delay2);
+    void green_led(int Delay1, int Delay2, int times) {
+      int i, times;
+      for(i = 0; i < times; i++){
+        digitalWrite(Green_led, HIGH);
+        delay(Delay1);
+        digitalWrite(Green_led, LOW);
+        delay(Delay2);
+      }
+      
     }
 
     void red_led(int Delay1, int Delay2) {
@@ -66,8 +70,11 @@ void data_handler(String cardID) {
       if(!error){
         String code = doc["code"].as<String>();
         if(code == "001"){
-          alert.green_led(1000, 1000);
-          
+          alert.green_led(100, 100, 2);
+
+        }
+        else if(code == "000"){
+          alert.red_led(5000, 1000);
         }
       }
 
