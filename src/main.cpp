@@ -9,8 +9,8 @@
 #define RST_PIN D1  // Reset pin
 #define SS_PIN D2   // Slave select (SDA) pin
 #define Green_led D0 // GPIO s3
-#define Red_led D3
-#define Card_led 10
+#define Red_led 10
+#define Card_led D3
 #define Wait_led 9
 #define alarm D4
 #define servo_motor D8
@@ -120,6 +120,10 @@ public:
         while (WiFi.status() != WL_CONNECTED) {
             delay(500);
             Serial.print(".");
+            digitalWrite(Red_led, HIGH);
+            delay(1000);
+            digitalWrite(Red_led, LOW);
+            delay(1000);
         }
         Serial.println("\nWiFi connected.");
     }
