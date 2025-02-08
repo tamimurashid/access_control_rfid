@@ -126,6 +126,7 @@ public:
             delay(1000);
         }
         Serial.println("\nWiFi connected.");
+        digitalWrite(Card_led, HIGH);
     }
 };
 
@@ -182,6 +183,7 @@ public:
             }
         } else {
             Serial.println("Error in HTTP request: " + String(httpResponseCode));
+            alert.red_led(100, 100, 10);
         }
 
         http.end();
