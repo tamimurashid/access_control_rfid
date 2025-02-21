@@ -18,8 +18,8 @@
 // WiFi credentials
 const char* ssid = "Reindeer";        
 const char* password = "200120022003";  
-// const char* serverUrl = "http://192.168.10.103:8888/Iot_web_project/Access_control/Api/";
-const char* serverUrl = "http://13.60.74.47/Acces_control_web/Api/";
+// const char* serverUrl = "http://192.168.10.103:8888/Access_control/Api/"; //local test
+const char* serverUrl = "http://13.60.74.47/Acces_control_web/Api/";// ec2 instance 
 
 // Create an instance of the WiFiClient
 WiFiClient wifiClient;
