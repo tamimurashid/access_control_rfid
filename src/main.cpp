@@ -3,6 +3,7 @@
 #include <Servo.h>
 #include <MFRC522.h>
 #include <ESP8266WiFi.h>
+#include <WiFiManager.h>
 #include <ArduinoJson.h>
 #include <ESP8266HTTPClient.h>
 
@@ -17,12 +18,13 @@
 #define servo_motor D8
 
 // WiFi credentials
-const char* ssid = "Reindeer";        
-const char* password = "200120022003";  
+// const char* ssid = "Reindeer";        
+// const char* password = "200120022003";  
 const char* serverUrl = "http://192.168.10.103:8888/Access_control/Api/"; //local test
 // const char* serverUrl = "http://13.60.74.47/Acces_control_web/Api/";// ec2 instance 
 
 // Create an instance of the WiFiClient
+// WiFiClient wifiClient;
 WiFiClient wifiClient;
 
 Servo myServo;
@@ -113,24 +115,22 @@ public:
 };
 
 // WiFi Manager Class
-class WiFiManager {
-public:
-    void connect() {
-        WiFi.begin(ssid, password);
-        Serial.print("Connecting to WiFi");
-
-        while (WiFi.status() != WL_CONNECTED) {
-            delay(500);
-            Serial.print(".");
-            digitalWrite(Red_led, HIGH);
-            delay(1000);
-            digitalWrite(Red_led, LOW);
-            delay(1000);
-        }
-        Serial.println("\nWiFi connected.");
-        digitalWrite(Card_led, HIGH);
-    }
-};
+// class WiFiManager{
+// public:
+//     void connect() {
+//         Serial.print("Connecting to WiFi");
+//         while (WiFi.status() != WL_CONNECTED) {
+//             delay(500);
+//             Serial.print(".");
+//             digitalWrite(Red_led, HIGH);
+//             delay(1000);
+//             digitalWrite(Red_led, LOW);
+//             delay(1000);
+//         }
+//         Serial.println("\nWiFi connected.");
+//         digitalWrite(Card_led, HIGH);
+//     }
+// };
 
 // Access Control Class: Handles API communication
 class AccessControl {
@@ -152,7 +152,6 @@ public:
             Serial.println("WiFi not connected.");
             return;
         }
-
         HTTPClient http;
         http.begin(client, serverUrl);
         http.addHeader("Content-Type", "application/json");
@@ -218,7 +217,7 @@ void setup() {
 
     // Initialize Components
     rfidReader.init();
-    wifiManager.connect();
+    wifiManager.autoConnect("AccessControlAP");
 }
 
 void loop() {
