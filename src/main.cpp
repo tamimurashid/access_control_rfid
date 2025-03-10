@@ -270,11 +270,14 @@ void loop() {
         digitalWrite(Card_led, HIGH); // Keep LED on when connected
     }
 
+    accessControl.fetchMode();
+
     String cardID = rfidReader.readCard();
     if (cardID != "") {
         Serial.print("Card UID: ");
         Serial.println(cardID);
         accessControl.processCard(cardID);
     }
+     delay(5000); // Prevents spamming the server
 }
 
