@@ -229,7 +229,10 @@ void setup() {
 void loop() {
      if (WiFi.status() != WL_CONNECTED) { 
         accessControl.connect(); // Only connect if not already connected
+    } else {
+        digitalWrite(Card_led, HIGH); // Keep LED on when connected
     }
+
     String cardID = rfidReader.readCard();
     if (cardID != "") {
         Serial.print("Card UID: ");
