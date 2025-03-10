@@ -155,9 +155,8 @@ public:
              digitalWrite(Red_led, LOW);
              delay(1000);
             return;
-        }else{
+        }else if(WiFi.status() == WL_CONNECTED){
             digitalWrite(Card_led, HIGH);
-
         }
         HTTPClient http;
         http.begin(client, serverUrl);
