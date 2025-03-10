@@ -114,23 +114,6 @@ public:
     }
 };
 
-// WiFi Manager Class
-// class WiFiManager{
-// public:
-//     void connect() {
-//         Serial.print("Connecting to WiFi");
-//         while (WiFi.status() != WL_CONNECTED) {
-//             delay(500);
-//             Serial.print(".");
-//             digitalWrite(Red_led, HIGH);
-//             delay(1000);
-//             digitalWrite(Red_led, LOW);
-//             delay(1000);
-//         }
-//         Serial.println("\nWiFi connected.");
-//         digitalWrite(Card_led, HIGH);
-//     }
-// };
 
 // Access Control Class: Handles API communication
 class AccessControl {
@@ -146,17 +129,24 @@ public:
     delay(5000);        // Hold position for 5 seconds
     myServo.write(0);   // Return to the initial position (0 degrees)
     } 
+    void connect() {
+        Serial.print("Connecting to WiFi");
+        while (WiFi.status() != WL_CONNECTED) {
+            delay(500);
+            Serial.print(".");
+            digitalWrite(Red_led, HIGH);
+            delay(1000);
+            digitalWrite(Red_led, LOW);
+            delay(1000);
+        }
+        Serial.println("\nWiFi connected.");
+        digitalWrite(Card_led, HIGH);
+    }
 
     void processCard(String cardID) {
         if (WiFi.status() != WL_CONNECTED) {
             Serial.println("WiFi not connected.");
-             digitalWrite(Red_led, HIGH);
-             delay(1000);
-             digitalWrite(Red_led, LOW);
-             delay(1000);
             return;
-        }else if(WiFi.status() == WL_CONNECTED){
-            digitalWrite(Card_led, HIGH);
         }
         HTTPClient http;
         http.begin(client, serverUrl);
@@ -223,6 +213,7 @@ void setup() {
 
     // Initialize Components
     rfidReader.init();
+    accessControl.connect();
     wifiManager.autoConnect("AccessControlAP");
 }
 
