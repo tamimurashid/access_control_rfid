@@ -150,7 +150,14 @@ public:
     void processCard(String cardID) {
         if (WiFi.status() != WL_CONNECTED) {
             Serial.println("WiFi not connected.");
+             digitalWrite(Red_led, HIGH);
+             delay(1000);
+             digitalWrite(Red_led, LOW);
+             delay(1000);
             return;
+        }else{
+            digitalWrite(Card_led, HIGH);
+
         }
         HTTPClient http;
         http.begin(client, serverUrl);
