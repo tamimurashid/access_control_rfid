@@ -123,6 +123,7 @@ private:
 
 public:
     AccessControl(WiFiClient& client, Alert& alertObj) : client(client), alert(alertObj) {}
+    String mode = "auth_mod"; // Default mode is Authentication Mode
 
     void rotateServo() {
     myServo.write(45);  // Move to 45 degrees clockwise
@@ -152,6 +153,42 @@ public:
     digitalWrite(Card_led, HIGH);
     }
 
+    void fetchMode() {
+        if (WiFi.status() != WL_CONNECTED) {
+            Serial.println("WiFi not connected.");
+            return;
+        }
+
+        HTTPClient http;
+        http.begin(client, serverUrl);
+        http.addHeader("Content-Type", "application/json");
+
+        String payload = "{\"code\": \"check_mode\"}";
+        int httpResponseCode = http.POST(payload);
+
+        if (httpResponseCode > 0) {
+            String response = http.getString();
+            Serial.println("Mode Response: " + response);
+
+            JsonDocument doc;
+            DeserializationError error = deserializeJson(doc, response);
+
+            if (!error) {
+                String newMode = doc["status"].as<String>();
+                if (newMode == "reg_mod" || newMode == "auth_mod") {
+                    mode = newMode;
+                    Serial.println("Mode set to: " + mode);
+                }
+            } else {
+                Serial.println("JSON Parsing Error: " + String(error.f_str()));
+            }
+        } else {
+            Serial.println("Error in HTTP request: " + String(httpResponseCode));
+        }
+
+        http.end();
+    }
+
     void processCard(String cardID) {
         if (WiFi.status() != WL_CONNECTED) {
             Serial.println("WiFi not connected.");
@@ -162,7 +199,7 @@ public:
         http.addHeader("Content-Type", "application/json");
 
         // Create JSON payload
-        String payload = "{\"cardID\": \"" + cardID + "\"}";
+        String payload = "{\"cardID\": \"" + cardID + "\", \"mode\": \"" + mode + "\"}";
         int httpResponseCode = http.POST(payload);
 
         if (httpResponseCode > 0) {
