@@ -130,17 +130,26 @@ public:
     myServo.write(0);   // Return to the initial position (0 degrees)
     } 
     void connect() {
-        Serial.print("Connecting to WiFi");
-        while (WiFi.status() != WL_CONNECTED) {
-            delay(500);
-            Serial.print(".");
-            digitalWrite(Red_led, HIGH);
-            delay(1000);
-            digitalWrite(Red_led, LOW);
-            delay(1000);
+         Serial.print("Connecting to WiFi");
+    unsigned long startTime = millis();  // Track time
+
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+        digitalWrite(Red_led, HIGH);
+        delay(500);
+        digitalWrite(Red_led, LOW);
+        delay(500);
+
+        // If WiFi doesn't connect within 15 seconds, restart ESP
+        if (millis() - startTime > 15000) {  
+            Serial.println("\nWiFi connection failed! Restarting...");
+            ESP.restart(); // Restart the ESP8266
         }
-        Serial.println("\nWiFi connected.");
-        digitalWrite(Card_led, HIGH);
+    }
+
+    Serial.println("\nWiFi connected.");
+    digitalWrite(Card_led, HIGH);
     }
 
     void processCard(String cardID) {
@@ -213,11 +222,14 @@ void setup() {
 
     // Initialize Components
     rfidReader.init();
-    accessControl.connect();
+   
     wifiManager.autoConnect("AccessControlAP");
 }
 
 void loop() {
+     if (WiFi.status() != WL_CONNECTED) { 
+        accessControl.connect(); // Only connect if not already connected
+    }
     String cardID = rfidReader.readCard();
     if (cardID != "") {
         Serial.print("Card UID: ");
