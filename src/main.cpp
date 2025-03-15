@@ -1,4 +1,13 @@
-
+/*-----------------------------------------------------------------------------------------------
+//             -----
+//           /    
+//          |
+//          |
+             \
+//        
+//
+//
+-------------------------------------------------------------------------------------------------*/
 #include <SPI.h>
 #include <Servo.h>
 #include <MFRC522.h>
@@ -278,6 +287,6 @@ void loop() {
         Serial.println(cardID);
         accessControl.processCard(cardID);
     }
-     delay(5000); // Prevents spamming the server
+     delay(2000); // Prevents spamming the server
 }
 
