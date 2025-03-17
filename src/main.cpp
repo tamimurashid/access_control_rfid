@@ -188,6 +188,12 @@ public:
                 if (newMode == "reg_mod" || newMode == "auth_mod") {
                     mode = newMode;
                     Serial.println("Mode set to: " + mode);
+                    if(newMode == "reg_mod"){
+                        digitalWrite(Green_led, HIGH);
+                        delay(500);
+                        digitalWrite(Green_led, LOW);
+                        delay(500);
+                    }
                 }
             } else {
                 Serial.println("JSON Parsing Error: " + String(error.f_str()));
