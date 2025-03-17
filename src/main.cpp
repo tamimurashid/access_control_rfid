@@ -211,6 +211,7 @@ public:
         // Create JSON payload
         String payload = "{\"cardID\": \"" + cardID + "\", \"mode\": \"" + mode + "\"}";
         int httpResponseCode = http.POST(payload);
+        Serial.println(payload);
 
         if (httpResponseCode > 0) {
             String response = http.getString();
