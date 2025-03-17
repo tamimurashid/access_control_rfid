@@ -190,9 +190,9 @@ public:
                     Serial.println("Mode set to: " + mode);
                     if(newMode == "reg_mod"){
                         digitalWrite(Green_led, HIGH);
-                        delay(500);
+                        delay(100);
                         digitalWrite(Green_led, LOW);
-                        delay(500);
+                        delay(100);
                     }
                 }
             } else {
