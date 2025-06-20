@@ -43,8 +43,8 @@
 // WiFi credentials
 // const char* ssid = "Reindeer";        
 // const char* password = "200120022003";  
-const char* serverUrl = "http://192.168.10.120:8888/Access_control/Api/";
-const char* serverUrlfetch_mode = "http://192.168.10.120:8888/Access_control/Api/get_mode.php"; //local test
+const char* serverUrl = "http://192.168.10.103:8888/Access_control/Api/";
+const char* serverUrlfetch_mode = "http://192.168.10.103:8888/Access_control/Api/get_mode.php"; //local test
 // const char* serverUrl = "http://13.60.74.47/Acces_control_web/Api/";// ec2 instance 
 
 // Create an instance of the WiFiClient
@@ -273,7 +273,7 @@ AccessControl accessControl(wifiClient, alert);
 
 void setup() {
     // Initialize Serial Monitor
-    Serial.begin(115200);
+    Serial.begin(9600);
     while (!Serial);
 
     myServo.attach(servo_motor); // Attach servo to the defined pin
